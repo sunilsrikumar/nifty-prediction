@@ -13,12 +13,15 @@ enddate="2022-11-16"
 def nifty_50_list():
     resp = requests.get('https://en.wikipedia.org/wiki/NIFTY_50')
     soup = bs.BeautifulSoup(resp.text, 'lxml')
+    # print(f"soup:{soup}")
 
     table = soup.find('table', {'class': 'wikitable sortable'},'tbody')
+    # print(f"table:{table}")
 
     tickers = []
     for row in table.findAll('tr')[1:]:
         ticker = row.findAll('td')[1].text
+        # print(f"ticker{ticker}")
         tickers.append(ticker)
 
     with open("nifty50_list.pickle","wb") as f:
@@ -36,9 +39,9 @@ def nifty_50_list():
 def getStockdataFromQuandl(ticker):
     quandl_code="NSE/"+ticker
     try:
-        if not os.path.exists(f'stock_data/{ticker}.csv'):
+        if not os.path.exists(f'/home/sunil/workspace/fordnext/nifty-prediction/stock_data/{ticker}.csv'):
           data=quandl.get(quandl_code,start_date=startdate,end_date=enddate)
-          data.to_csv(f'stock_data/{ticker}.csv')
+          data.to_csv(f'/home/sunil/workspace/fordnext/nifty-prediction/stock_data/{ticker}.csv')
         else:
             print(f"stock data for {ticker} already exists")
     except quandl.errors.quandl_error.NotFoundError as e:
@@ -51,7 +54,7 @@ def load():
     for ticker in tickers:
         getStockdataFromQuandl(ticker)
         try:
-            data=pd.read_csv(f'stock_data/{ticker}.csv')
+            data=pd.read_csv(f'/home/sunil/workspace/fordnext/nifty-prediction/stock_data/{ticker}.csv')
             if(ticker == "NIFTY_50"):
                 data.rename(columns={'Close':f"{ticker}_Close",'Shares Traded':f"{ticker}_Volume"},inplace=True)
             else:
@@ -63,3 +66,6 @@ def load():
     df.to_csv('nifty50_closingprices.csv')
     df.dropna(inplace=True)
     return df
+
+nifty_50_list()
+load()
