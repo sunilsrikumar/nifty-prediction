@@ -31,3 +31,35 @@ def nifty_50_list():
     tickers.remove('UPL')
     tickers.remove('IBULHSGFIN')
     return tickers
+
+#function to fetch stock prices from Quandl and then storing them to avoid making duplicate calls to Quandl API
+def getStockdataFromQuandl(ticker):
+    quandl_code="NSE/"+ticker
+    try:
+        if not os.path.exists(f'stock_data/{ticker}.csv'):
+          data=quandl.get(quandl_code,start_date=startdate,end_date=enddate)
+          data.to_csv(f'stock_data/{ticker}.csv')
+        else:
+            print(f"stock data for {ticker} already exists")
+    except quandl.errors.quandl_error.NotFoundError as e:
+        print(ticker)
+        print(str(e))
+
+def load():
+    tickers=get_nifty50_list(True)
+    df=pd.DataFrame()
+    for ticker in tickers:
+        getStockdataFromQuandl(ticker)
+        try:
+            data=pd.read_csv(f'stock_data/{ticker}.csv')
+            if(ticker == "NIFTY_50"):
+                data.rename(columns={'Close':f"{ticker}_Close",'Shares Traded':f"{ticker}_Volume"},inplace=True)
+            else:
+                data.rename(columns={'Close':f"{ticker}_Close",'Total Trade Quantity':f"{ticker}_Volume"},inplace=True)
+            df=pd.concat([df,data[f'{ticker}_Volume'],data[f'{ticker}_Close']],axis=1)
+        except Exception as e:
+            print(f"couldn't find {ticker}")
+            print(str(e))
+    df.to_csv('nifty50_closingprices.csv')
+    df.dropna(inplace=True)
+    return df
