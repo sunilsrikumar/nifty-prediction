@@ -27,12 +27,12 @@ def nifty_50_list():
     with open("nifty50_list.pickle","wb") as f:
         pickle.dump(tickers,f)
 
-    tickers.append('BAJAJ_AUTO')#Adding it manually since ticker name obtained from Wikipedia contains a hypen whereas quandl code expects an underscore
-    tickers.append('MM')#Adding it manually since quandl code is different than the ticker symbol obtained from Wiki which is M&M
+    tickers.append('BAJAJ_AUTO') #Adding it manually since ticker name obtained from Wikipedia contains a hypen whereas quandl code expects an underscore
+    tickers.append('MM') #Adding it manually since quandl code is different than the ticker symbol obtained from Wiki which is M&M
     tickers.append('NIFTY_50')#Fetching data for NIFTY50 index whose price we want to predict
-    tickers.remove('VEDL')
+    # tickers.remove('VEDL')
     tickers.remove('UPL')
-    tickers.remove('IBULHSGFIN')
+    # tickers.remove('IBULHSGFIN')
     return tickers
 
 #function to scrap NIFTY50 list from WIKI only if not already obtained
@@ -77,4 +77,4 @@ def load():
     return df
 
 # nifty_50_list()
-# load()
+load()

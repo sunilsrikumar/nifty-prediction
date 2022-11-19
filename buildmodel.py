@@ -3,13 +3,13 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense,Dropout,LSTM,BatchNormalization,Conv1D,MaxPooling1D
 import matplotlib.pyplot as plt
-import loadData
+import loaddata
 import preprocess
 from sklearn import preprocessing
 import pandas as pd
 
 
-df=loadData.load()
+df=loaddata.load()
 
 # features=len(df.columns)
 training_size=0.8
