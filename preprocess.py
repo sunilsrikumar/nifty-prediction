@@ -4,7 +4,7 @@ import numpy as np
 import loaddata
 
 
-#how many days data will be used to create series to train RNN
+#how many days data will be used to create series to train RNN using LSTM Layer
 SERIES_LENGTH=30
 PREDICT_LENGTH=7
 
@@ -26,17 +26,17 @@ def process_data(df):
 
     #comparing future nifty price with today's price and labeling it as 1 if price increases and zero otherwise
     df["Label"]=np.where(df["nifty_future_price"]>=df["NIFTY_50_Close"],1,0)
-    print(f"df with future column {df[:5]}") 
+    # print(f"df with future column {df[:5]}") 
 
     #dropping 'nifty_future_price'  columns as it is no longer required
     df.drop('nifty_future_price',1,inplace=True)
     df.to_csv('nifty50_future_label.csv')
-    print(f"df with labels {df[:5]}")
+    # print(f"df with labels {df[:5]}")
 
     sequence=[]
     temp=df.loc[:, df.columns != 'Label']
     temp=scale_data(temp)
-    print(f"temp{temp[:30]}")
+    # print(f"temp{temp[:30]}")
     for i in range (len(temp)-SERIES_LENGTH):
        sequence.append([np.array(temp[i:i+SERIES_LENGTH]),df.iloc[i+SERIES_LENGTH,-1]])
 
