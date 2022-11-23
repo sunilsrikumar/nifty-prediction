@@ -76,5 +76,5 @@ def load():
     df.dropna(inplace=True)
     return df
 
-# nifty_50_list()
+nifty_50_list()
 load()

@@ -33,7 +33,7 @@ test_x,test_y=preprocess.process_data(test_df)
 
 NAME="NIFTY50PRED"
 BATCH_SIZE=64
-EPOCHS=100
+EPOCHS=5
 
 
 def build_model():
